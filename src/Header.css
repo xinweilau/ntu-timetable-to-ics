@@ -1,0 +1,16 @@
+header {
+    background-color: var(--blue);
+}
+
+header > div {
+    width: var(--width);
+    margin: auto;
+}
+
+h1 {
+    color: var(--white);
+    text-align: left;
+
+    padding: 1.5rem;
+    font-size: 1.5rem;
+}
