@@ -1,0 +1,24 @@
+section {
+    width: var(--width);
+    margin: auto;
+}
+
+strong {
+    color: var(--blue);
+}
+
+h2 {
+    color: var(--red);
+}
+
+p {
+    padding: 1.3rem 0;
+}
+
+section > div {
+    padding: 1.5rem;
+}
+
+section {
+    margin: 1.5rem auto;
+}
