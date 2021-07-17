@@ -4,7 +4,7 @@ import ContentSection from "./ContentSection";
 import TextBox from "./TextBox";
 import TextArea from "./TextArea";
 import './Content.css';
-
+import CalendarGenHelper from "./CalendarGenHelper";
 
 function Content() {
     let [startDate, setStartDate] = useState(new Date());
@@ -17,6 +17,14 @@ function Content() {
     const updateStartDate = (value: string) => {
         setStartDate(new Date(value));
     };
+
+    const generateCalendar = () => {
+        let gen: CalendarGenHelper = new CalendarGenHelper(startDate, courseSchedule);
+        gen.processCourseSchedule();
+
+
+
+    }
 
     return(
         <div>
@@ -48,7 +56,7 @@ function Content() {
                         Click on <strong>Download</strong> once you are ready!
                     </p>
 
-                    <a className="button">Download</a>
+                    <a className="button" onClick={generateCalendar}>Download</a>
                 </div>
             </ContentSection>
         </div>
