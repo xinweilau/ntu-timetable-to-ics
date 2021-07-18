@@ -3,7 +3,6 @@ import FormSection from "./FormSection";
 import ContentSection from "./ContentSection";
 import TextBox from "./TextBox";
 import TextArea from "./TextArea";
-import './Content.css';
 import CalendarGenHelper from "./CalendarGenHelper";
 // @ts-ignore
 import FileSaver from 'file-saver';
