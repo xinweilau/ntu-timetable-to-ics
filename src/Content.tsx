@@ -4,6 +4,7 @@ import ContentSection from "./ContentSection";
 import TextBox from "./TextBox";
 import TextArea from "./TextArea";
 import CalendarGenHelper from "./CalendarGenHelper";
+import Notice from "./Notice";
 // @ts-ignore
 import FileSaver from 'file-saver';
 
@@ -11,6 +12,7 @@ function Content() {
     let [startDate, setStartDate] = useState(new Date());
     let [courseSchedule, setCourseSchedule] = useState("");
     let [base64Calendar, setBase64Calendar] = useState("");
+    let [noticeMessage, setNoticeMessage] = useState("");
 
     const updateCourseSchedule = (value: string) => {
         setCourseSchedule(value);
@@ -32,6 +34,14 @@ function Content() {
 
     return(
         <div>
+            <Notice messageType="announcement">
+                <p>
+                    The application is still in its development stage.
+                    <br/><br/>
+                    Do kindly ensure that every field is properly filled up to prevent any error.
+                </p>
+            </Notice>
+
             <FormSection title={"1. Indicate Start Date"} >
                 <div>
                     <p>
@@ -64,9 +74,10 @@ function Content() {
                     </p>
 
                     <a className="button" onClick={generateCalendar}>Generate</a>
-                    { (base64Calendar.length > 0) &&
-                        <a className="button" onClick={startDownload}>Download</a>
-                    };
+                    {
+                        (base64Calendar.length > 0) &&
+                        <a className="button" style={{ marginLeft: "1.3rem" }} onClick={startDownload}>Download</a>
+                    }
                 </div>
             </ContentSection>
         </div>

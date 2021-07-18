@@ -6,9 +6,17 @@ type Props = {
 }
 
 function TextBox({ onChange }: Props) {
+
+    const updateTextBox = (text: string) => {
+        onChange(text);
+
+        // @ts-ignore
+        document.getElementById("txtDate").style.color = "var(--black)";
+    }
+
     return (
         <div className="textBoxWrapper">
-            <input type="date" onChange={(e) => onChange(e.target.value)} placeholder="e.g. 11 August 2021" />
+            <input id="txtDate" type="date" onChange={(e) => updateTextBox(e.target.value)} placeholder="e.g. 11 August 2021" />
             <a className="button textbox-inline-button">Confirm</a>
         </div>
     );

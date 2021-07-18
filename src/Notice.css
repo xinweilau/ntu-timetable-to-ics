@@ -1,0 +1,15 @@
+.announcement {
+    background-color: var(--yellow);
+    border-radius: 5px;
+
+    width: 100%;
+}
+
+.message > h2 {
+    color: black;
+}
+
+
+section > div {
+    padding: 1.5rem;
+}
