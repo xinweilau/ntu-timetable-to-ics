@@ -1,8 +1,6 @@
 import Course from "./Course";
 import Clazz from "./Clazz";
 
-let uuid = require("uuid");
-
 class CalendarGenHelper {
     private startDate: Date;
     private courseSchedule: string;
@@ -51,7 +49,7 @@ class CalendarGenHelper {
                 // [4] - Location
                 // [5] - Teaching Period
                 for (let i: number = 1; i <= numTypeClazz; i += 1, clazzDetailStartIdx += intervalIdx) {
-                    let clazz: Clazz = new Clazz(md[clazzDetailStartIdx + 2], md[clazzDetailStartIdx + 4], md[clazzDetailStartIdx], md[clazzDetailStartIdx + 5]);
+                    let clazz: Clazz = new Clazz(md[clazzDetailStartIdx + 2], md[clazzDetailStartIdx + 4], md[clazzDetailStartIdx], md[clazzDetailStartIdx + 5], md[clazzDetailStartIdx + 3]);
                     c.addClazz(clazz);
                 }
 
@@ -68,9 +66,6 @@ class CalendarGenHelper {
     }
 
     private exportCalendar(clazzes: string) {
-        let tempFileName = `${uuid.v4().replaceAll("-", "_")}.ics`;
-        let tempFile = `../temp/${tempFileName}`;
-
         let calendar: string = (
             `BEGIN:VCALENDAR\n` +
             `VERSION:2.0\n` +
@@ -82,6 +77,8 @@ class CalendarGenHelper {
         );
 
         // TODO: Continue with Export File
+        // <a href="data:application/octet-stream;charset=utf-16le;base64,//5mAG8AbwAgAGIAYQByAAoA">text file</a>
+        return calendar;
     }
 }
 

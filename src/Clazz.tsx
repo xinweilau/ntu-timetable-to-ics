@@ -8,13 +8,14 @@ class Clazz {
     private location: string;
     private clazzType: ClazzType;
     private clazzSchedule: ClazzSchedule;
+    private timePeriod: Array<string>;
 
-    constructor(dayOfWeek: string, location: string, clazzType: string, teachingPeriod: string) {
+    constructor(dayOfWeek: string, location: string, clazzType: string, teachingPeriod: string, timePeriod: string) {
         this.dayOfWeek = dayOfWeek;
         this.location = location;
         // @ts-ignore
         this.clazzType = ClazzType[clazzType];
-
+        this.timePeriod = this.processTimePeriod(timePeriod);
         this.weekOfSemester = [];
         this.clazzSchedule = ClazzSchedule.CONSECUTIVE;
 
@@ -73,6 +74,14 @@ class Clazz {
 
     private setClazzSchedule2(cs: ClazzSchedule) {
         this.clazzSchedule = cs;
+    }
+
+    private processTimePeriod(timePeriod: string) {
+        return timePeriod.split("-");
+    }
+
+    getTimePeriod() {
+        return this.timePeriod;
     }
 
     getClazzScheduleType() {

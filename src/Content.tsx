@@ -5,10 +5,13 @@ import TextBox from "./TextBox";
 import TextArea from "./TextArea";
 import './Content.css';
 import CalendarGenHelper from "./CalendarGenHelper";
+// @ts-ignore
+import FileSaver from 'file-saver';
 
 function Content() {
     let [startDate, setStartDate] = useState(new Date());
     let [courseSchedule, setCourseSchedule] = useState("");
+    let [base64Calendar, setBase64Calendar] = useState("");
 
     const updateCourseSchedule = (value: string) => {
         setCourseSchedule(value);
@@ -20,10 +23,12 @@ function Content() {
 
     const generateCalendar = () => {
         let gen: CalendarGenHelper = new CalendarGenHelper(startDate, courseSchedule);
-        gen.processCourseSchedule();
+        setBase64Calendar(gen.processCourseSchedule());
+    }
 
-
-
+    const startDownload = () => {
+        let blob = new Blob([base64Calendar], {type: "text/calendar;charset=utf-8"});
+        FileSaver.saveAs(blob, "Class Schedule.ics");
     }
 
     return(
@@ -53,10 +58,16 @@ function Content() {
             <ContentSection title="3. Start to download">
                 <div>
                     <p>
-                        Click on <strong>Download</strong> once you are ready!
+                        1. Click on <strong>Generate</strong> button once you are ready!<br />
+                        2. Wait for the <strong>Download</strong> button to appear.<br />
+                        <br />
+                        The <strong>Download</strong> button will appear once it is ready for download.
                     </p>
 
-                    <a className="button" onClick={generateCalendar}>Download</a>
+                    <a className="button" onClick={generateCalendar}>Generate</a>
+                    { (base64Calendar.length > 0) &&
+                        <a className="button" onClick={startDownload}>Download</a>
+                    };
                 </div>
             </ContentSection>
         </div>
