@@ -7,11 +7,13 @@ class Course {
     private title: string;
     private group: string;
     private clazz: Array<Clazz>;
+    private courseStartDate: string;
 
-    constructor(code: string, title: string, group: string) {
+    constructor(code: string, title: string, group: string, courseStartDate: string) {
         this.code = code;
         this.title = title;
         this.group = group;
+        this.courseStartDate = courseStartDate;
         this.clazz = new Array<Clazz>();
     }
 
@@ -24,18 +26,18 @@ class Course {
 
         for (const c of this.clazz) {
             let scheduleType: number = c.getClazzScheduleType();
-            let today: Date = new Date("2021-08-09"); // TODO: replace date
+            let start: Date = new Date(this.courseStartDate);
             let lessonPeriod: Array<string> = c.getTimePeriod();
 
-            let startBeforeRecess: Date = new Date("2021-08-09");
-            startBeforeRecess.setDate(today.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekBeforeRecess()));
-            let startBeforeRevision: Date = new Date("2021-08-09");
-            startBeforeRevision.setDate(today.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekAfterRecess()));
+            let startBeforeRecess: Date = new Date(start);
+            startBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekBeforeRecess()));
+            let startBeforeRevision: Date = new Date(start);
+            startBeforeRevision.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekAfterRecess()));
 
-            let endBeforeRecess: Date = new Date("2021-08-09");
-            endBeforeRecess.setDate(today.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRecess()));
-            let endBeforeRevision: Date = new Date("2021-08-09");
-            endBeforeRevision.setDate(today.getDate() + + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRevision()));
+            let endBeforeRecess: Date = new Date(start);
+            endBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRecess()));
+            let endBeforeRevision: Date = new Date(start);
+            endBeforeRevision.setDate(start.getDate() + + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRevision()));
 
             let uid: string = uuid.v4();
             let title: string = this.title;
@@ -45,7 +47,7 @@ class Course {
             let clazzLocation: string = c.getClazzLocation();
             let dtStart: string = this.toISODate(startBeforeRecess, lessonPeriod[0]);
             let dtEnd: string = this.toISODate(startBeforeRecess, lessonPeriod[1]);
-            let dtStamp: string = this.toISODate(today, "0000");
+            let dtStamp: string = this.toISODate(start, "0000");
             let dtUntil: string = this.toISODate(endBeforeRecess, "0000");
 
             // before recess week

@@ -39,7 +39,8 @@ class CalendarGenHelper {
 
             if (group.trim() != "")
             {
-                let c: Course = new Course(md[0], md[1], group);
+                let startDate: string = this.startDate.toString();
+                let c: Course = new Course(md[0], md[1], group, startDate);
                 let numTypeClazz: number = (md.length - clazzDetailStartIdx) % 5;
 
                 // [0] - Type of Class
