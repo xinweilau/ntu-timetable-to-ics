@@ -29,15 +29,22 @@ class Course {
             let start: Date = new Date(this.courseStartDate);
             let lessonPeriod: Array<string> = c.getTimePeriod();
 
-            let startBeforeRecess: Date = new Date(start);
+            let startBeforeRecess: Date = new Date(this.courseStartDate);
             startBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekBeforeRecess()));
-            let startBeforeRevision: Date = new Date(start);
+            let startBeforeRevision: Date = new Date(this.courseStartDate);
             startBeforeRevision.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekAfterRecess()));
 
-            let endBeforeRecess: Date = new Date(start);
-            endBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRecess()));
-            let endBeforeRevision: Date = new Date(start);
-            endBeforeRevision.setDate(start.getDate() + + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRevision()));
+            let endBeforeRecess: Date = new Date(this.courseStartDate);
+            let endBeforeRevision: Date = new Date(this.courseStartDate);
+
+            // if it only one week arrangement
+            if (c.getLastWeekBeforeRecess() === undefined || c.getLastWeekBeforeRevision() === undefined) {
+                endBeforeRecess.setDate(start.getDate() + c.getDayOfWeek());
+                endBeforeRevision.setDate(start.getDate() + c.getDayOfWeek());
+            } else {
+                endBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRecess()));
+                endBeforeRevision.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRevision()));
+            }
 
             let uid: string = uuid.v4();
             let title: string = this.title;

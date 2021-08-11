@@ -1,5 +1,6 @@
 import Course from "./Course";
 import Clazz from "./Clazz";
+import {ClazzType} from "./ClazzType";
 
 class CalendarGenHelper {
     private startDate: Date;
@@ -8,6 +9,7 @@ class CalendarGenHelper {
     constructor(startDate: Date, courseSchedule: string) {
         this.startDate = startDate;
         this.courseSchedule = courseSchedule;
+        this.processCourseSchedule();
     }
 
     processCourseSchedule() {
@@ -41,7 +43,7 @@ class CalendarGenHelper {
             {
                 let startDate: string = this.startDate.toString();
                 let c: Course = new Course(md[0], md[1], group, startDate);
-                let numTypeClazz: number = (md.length - clazzDetailStartIdx) % 5;
+                let numTypeClazz: number = md.filter(x => x in ClazzType).length;
 
                 // [0] - Type of Class
                 // [1] - Group
