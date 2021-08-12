@@ -25,25 +25,27 @@ class Course {
         let vevents: Array<string> = [];
 
         for (const c of this.clazz) {
+            let singleEvent: boolean = false;
             let scheduleType: number = c.getClazzScheduleType();
             let start: Date = new Date(this.courseStartDate);
             let lessonPeriod: Array<string> = c.getTimePeriod();
 
-            let startBeforeRecess: Date = new Date(this.courseStartDate);
+            let startBeforeRecess: Date = new Date(start);
             startBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekBeforeRecess()));
-            let startBeforeRevision: Date = new Date(this.courseStartDate);
+            let startBeforeRevision: Date = new Date(start);
             startBeforeRevision.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getStartWeekAfterRecess()));
 
-            let endBeforeRecess: Date = new Date(this.courseStartDate);
-            let endBeforeRevision: Date = new Date(this.courseStartDate);
+            let endBeforeRecess: Date = new Date(start);
+            let endBeforeRevision: Date = new Date(start);
 
             // if it only one week arrangement
             if (c.getLastWeekBeforeRecess() === undefined || c.getLastWeekBeforeRevision() === undefined) {
-                endBeforeRecess.setDate(start.getDate() + c.getDayOfWeek());
-                endBeforeRevision.setDate(start.getDate() + c.getDayOfWeek());
+                singleEvent = true;
+                endBeforeRecess.setDate(startBeforeRecess.getDate());
+                endBeforeRevision.setDate(startBeforeRevision.getDate());
             } else {
-                endBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRecess()));
-                endBeforeRevision.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRevision()));
+                endBeforeRecess.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRecess()) + 1);
+                endBeforeRevision.setDate(start.getDate() + c.getDayOfWeek() + (7 * c.getLastWeekBeforeRevision()) + 1);
             }
 
             let uid: string = uuid.v4();
@@ -66,25 +68,27 @@ class Course {
                 `DTSTART:${dtStart}\n` +
                 `DTEND:${dtEnd}\n` +
                 `DTSTAMP:${dtStamp}\n` +
-                `RRULE:FREQ=WEEKLY;INTERVAL=${scheduleType};UNTIL=${dtUntil}\n` +
+                `${ (!singleEvent) ? `RRULE:FREQ=WEEKLY;INTERVAL=${scheduleType};UNTIL=${dtUntil}\n` : '' }` +
                 `END:VEVENT\n`);
 
-            uid = uuid.v4();
-            dtStart = this.toISODate(startBeforeRevision, lessonPeriod[0]);
-            dtEnd = this.toISODate(startBeforeRevision, lessonPeriod[1]);
-            dtUntil = this.toISODate(endBeforeRevision, "0000");
+            if (!singleEvent) {
+                uid = uuid.v4();
+                dtStart = this.toISODate(startBeforeRevision, lessonPeriod[0]);
+                dtEnd = this.toISODate(startBeforeRevision, lessonPeriod[1]);
+                dtUntil = this.toISODate(endBeforeRevision, "0000");
 
-            // before revision/exam
-            vevents.push(
-                `BEGIN:VEVENT\n` +
-                `UID:${uuid.v4()}\n` +
-                `SUMMARY:[${courseCode}] ${title} ${clazzType}\n` +
-                `DESCRIPTION:Group\: ${clazzGroup}\\nLocation\: ${clazzLocation}\n` +
-                `DTSTART:${dtStart}\n` +
-                `DTEND:${dtEnd}\n` +
-                `DTSTAMP:${dtStamp}\n` +
-                `RRULE:FREQ=WEEKLY;INTERVAL=${scheduleType};UNTIL=${dtUntil}\n` +
-                `END:VEVENT\n`);
+                // before revision/exam
+                vevents.push(
+                    `BEGIN:VEVENT\n` +
+                    `UID:${uuid.v4()}\n` +
+                    `SUMMARY:[${courseCode}] ${title} ${clazzType}\n` +
+                    `DESCRIPTION:Group\: ${clazzGroup}\\nLocation\: ${clazzLocation}\n` +
+                    `DTSTART:${dtStart}\n` +
+                    `DTEND:${dtEnd}\n` +
+                    `DTSTAMP:${dtStamp}\n` +
+                    `RRULE:FREQ=WEEKLY;INTERVAL=${scheduleType};UNTIL=${dtUntil}\n` +
+                    `END:VEVENT\n`);
+            }
         }
 
         return vevents.reduce((x, y) => x + y);
